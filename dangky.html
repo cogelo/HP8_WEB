@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng ký</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="dangky.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Đăng ký tài khoản</h2>
+    <form id="registerForm">
+      <label for="fullname">Họ và tên</label>
+      <input type="text" id="fullname" name="fullname" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+      <small class="error" id="emailError"></small>
+
+   
+      <!-- Mật khẩu -->
+    <!-- Trường Mật khẩu -->
+  <label for="password">Mật khẩu</label>
+  <div class="password-wrapper">
+    <input type="password" id="password" name="password" required>
+    <i class="fa-solid fa-eye-slash toggle-password" toggle="#password"></i>
+  </div>
+  <small id="passwordStrength" style="font-size: 0.9em; margin-top: 4px; display: block;"></small>
+
+  <small class="error" id="passwordError"></small>
+
+
+  <!-- Trường Xác nhận mật khẩu -->
+  <label for="confirmPassword">Xác nhận mật khẩu</label>
+  <div class="password-wrapper">
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <i class="fa-solid fa-eye-slash toggle-password" toggle="#confirmPassword"></i>
+  </div>
+  <small class="error" id="confirmPasswordError"></small>
+
+
+    <label>
+    <input type="checkbox" id="remember" />
+    Ghi nhớ tôi
+  </label><br /><br />
+
+    <label>
+    <input type="checkbox" id="agree">
+    Tôi đồng ý với <a href="#">điều khoản sử dụng</a>
+  </label><br>
+
+  <div id="agreeError" class="error-text" style="color: red;"></div>
+
+
+      <div id="errorMessages" style="color: red; margin-top: 10px;"></div>
+      <button type="submit" id="submitBtn">Đăng ký</button>
+      
+    </form>
+  </div>
+
+  <script src="dangky.js"></script>
+</body>
+</html>
