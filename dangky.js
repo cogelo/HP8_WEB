@@ -14,6 +14,14 @@ const agreeError = document.getElementById("agreeError");
 const errorMessages = document.getElementById("errorMessages");
 const strengthText = document.getElementById("passwordStrength");
 
+document.querySelectorAll("input").forEach((input) => {
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      console.log("Bạn vừa nhấn Enter trong ô:", input.name || input.id || "không có tên");
+    }
+  });
+});
+
 // Ẩn/hiện mật khẩu
 document.querySelectorAll(".toggle-password").forEach((icon) => {
   icon.addEventListener("click", () => {
@@ -83,7 +91,7 @@ function validateEmail() {
     return true;
   }
 }
-
+   
 // Kiểm tra mật khẩu real-time
 function validatePassword() {
   const val = password.value.trim();
@@ -98,7 +106,7 @@ function validatePassword() {
     return true;
   }
 }
-
+      
 // Kiểm tra xác nhận mật khẩu real-time
 confirmPassword.addEventListener("input", validateConfirmPassword);
 function validateConfirmPassword() {
@@ -110,7 +118,7 @@ function validateConfirmPassword() {
     return true;
   }
 }
-
+      
 // Xử lý submit
 form.addEventListener("submit", (e) => {
   e.preventDefault();
