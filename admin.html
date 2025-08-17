@@ -6,7 +6,7 @@
   <title>Tiệm Hoa Teky</title>
   <style>
     :root{
-      --primary:#32e91e; /* hồng */
+      --primary:#e91e63;
       --primary-600:#d81b60;
       --bg:#fff7fb;
       --text:#1f2937;
@@ -69,7 +69,8 @@
     .add{width:100%;margin-top:10px;border:none;background:var(--primary);color:#fff;border-radius:12px;padding:10px 12px;cursor:pointer}
     .add:hover{background:var(--primary-600)}
 
-    .footer{padding:24px;color:var(--muted);text-align:center}
+    .footer{padding:24px;color:var(--muted);text-align:center;background:#fff}
+    .footer a{color:var(--primary);text-decoration:none;margin:0 6px}
   </style>
 </head>
 <body>
@@ -85,6 +86,15 @@
       { id:"vases", label:"Bình & Lọ", icon:"🏺" },
       { id:"delivery", label:"Giao nhanh", icon:"🚚" },
       { id:"contact", label:"Liên hệ", icon:"☎️" },
+    ];
+
+    const sampleProducts = [
+      { name:"Hoa hồng đỏ", price:199000, img:"https://images.unsplash.com/photo-1509043759401-136742328bb3" },
+      { name:"Hoa tulip vàng", price:229000, img:"https://images.unsplash.com/photo-1504198266285-165a16f4de17" },
+      { name:"Hoa baby trắng", price:159000, img:"https://images.unsplash.com/photo-1519681393784-d120267933ba" },
+      { name:"Hoa hướng dương", price:189000, img:"https://images.unsplash.com/photo-1470115636492-6d2b56f9146e" },
+      { name:"Bó hoa mix", price:249000, img:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6" },
+      { name:"Bình hoa lavender", price:279000, img:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6" },
     ];
 
     // ====== Helpers ======
@@ -139,7 +149,6 @@
         document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));
         a.classList.add('active');
         renderContent(item.id);
-        // đóng menu trên mobile
         sidebarWrap.classList.remove('open');
         backdrop.classList.remove('show');
       });
@@ -185,30 +194,85 @@
 
     // ====== Renderers ======
     function renderContent(section){
-      if(section==='home' || section==='collections' || section==='bouquets' || section==='vases'){
+      if(section==='home'){
         main.innerHTML = `
+          <h2>🌸 Chào mừng đến Bloomy</h2>
+          <p>Chúng tôi chuyên cung cấp hoa tươi, quà tặng và dịch vụ giao hoa tận nơi nhanh chóng. 
+             Hãy chọn ngay một bó hoa để gửi yêu thương!</p>
           <div class="grid" id="grid"></div>
+          <div style="margin-top:24px">
+            <h3>Tại sao chọn Bloomy?</h3>
+            <ul>
+              <li>💖 Hoa tươi nhập mới mỗi ngày</li>
+              <li>🚚 Giao nhanh trong 2h nội thành</li>
+              <li>🎁 Miễn phí thiệp & gói quà đẹp</li>
+              <li>💯 Đảm bảo hài lòng</li>
+            </ul>
+          </div>
         `;
         renderCards(sampleProducts);
-      } else if(section==='delivery'){
+      } 
+      else if(section==='collections'){
         main.innerHTML = `
-          <h2>Giao nhanh trong 2h 🚚</h2>
-          <p>Chúng tôi hỗ trợ giao hàng nội thành trong vòng 2 giờ cho các đơn trước 18:00. Phí ship chỉ từ <b>20.000đ</b>.</p>
-          <div class="card" style="padding:18px">
+          <h2>💐 Bộ sưu tập</h2>
+          <p>Những bộ sưu tập hoa được thiết kế đặc biệt cho từng dịp quan trọng.</p>
+          <div class="grid" id="grid"></div>
+          <div style="margin-top:20px">
+            <h3>🌟 Gợi ý</h3>
+            <p>- Bộ sưu tập "Valentine" lãng mạn</p>
+            <p>- Bộ sưu tập "Sinh nhật" rực rỡ</p>
+            <p>- Bộ sưu tập "Tri ân" thanh lịch</p>
+          </div>
+        `;
+        renderCards(sampleProducts);
+      }
+      else if(section==='bouquets'){
+        main.innerHTML = `
+          <h2>🌹 Hoa bó</h2>
+          <p>Các bó hoa được phối sẵn, phù hợp cho nhiều dịp: sinh nhật, kỷ niệm, tốt nghiệp...</p>
+          <div class="grid" id="grid"></div>
+          <p style="margin-top:20px"><b>Mẹo:</b> Bạn có thể đặt hoa theo màu chủ đạo hoặc loài hoa yêu thích.</p>
+        `;
+        renderCards(sampleProducts);
+      }
+      else if(section==='vases'){
+        main.innerHTML = `
+          <h2>🏺 Bình & Lọ</h2>
+          <p>Những mẫu hoa cắm sẵn trong bình và lọ, tiện lợi trang trí tại nhà hoặc văn phòng.</p>
+          <div class="grid" id="grid"></div>
+          <p style="margin-top:20px">✨ Thích hợp làm quà tặng tân gia, khai trương hoặc trang trí bàn làm việc.</p>
+        `;
+        renderCards(sampleProducts);
+      }
+      else if(section==='delivery'){
+        main.innerHTML = `
+          <h2>🚚 Giao nhanh trong 2h</h2>
+          <p>Bloomy hỗ trợ giao hàng siêu tốc nội thành. Đặt hoa trước <b>18:00</b> để nhận ngay trong ngày.</p>
+          <div class="card" style="padding:18px;margin-top:12px">
             <label style="display:block;margin-bottom:8px">Nhập địa chỉ để kiểm tra:</label>
             <input id="addr" placeholder="Ví dụ: 123 Lê Lợi, Q.1" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:12px" />
             <button class="add" style="margin-top:12px" onclick="alert('Khu vực của bạn được hỗ trợ!')">Kiểm tra</button>
           </div>
+          <p style="margin-top:16px">✔️ Phí ship chỉ từ <b>20.000đ</b>.  
+          ✔️ Miễn phí với đơn hàng trên 500.000đ.</p>
         `;
-      } else if(section==='contact'){
+      }
+      else if(section==='contact'){
         main.innerHTML = `
-          <h2>Liên hệ ☎️</h2>
+          <h2>☎️ Liên hệ</h2>
           <div class="card"><div class="body">
             <p><b>Hotline:</b> 0909 000 111</p>
             <p><b>Zalo:</b> @bloomy.flowers</p>
             <p><b>Địa chỉ:</b> 45 Hoa Hồng, Q.Phú Nhuận, TP.HCM</p>
-            <p>Giờ mở cửa: 8:00 - 21:00 (T2 - CN)</p>
+            <p><b>Giờ mở cửa:</b> 8:00 - 21:00 (T2 - CN)</p>
           </div></div>
+          <div style="margin-top:20px">
+            <h3>📧 Gửi tin nhắn cho chúng tôi</h3>
+            <input placeholder="Tên của bạn" style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px" />
+            <input placeholder="Email / SĐT" style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px" />
+            <textarea placeholder="Nội dung..." style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;height:80px"></textarea>
+            <button class="add" style="margin-top:8px">Gửi</button>
+          </div>
         `;
       }
       window.scrollTo({top:0,behavior:'smooth'});
@@ -245,6 +309,15 @@
     renderContent('home');
   </script>
 
-  <footer class="footer">© 2025 Bloomy • Làm bằng HTML/CSS & JavaScript (Header + Taskbar dựng bằng JS)</footer>
+  <footer class="footer">
+    <p>© 2025 Bloomy • Tiệm hoa & quà tặng tại TP.HCM</p>
+    <p>Hotline: 0909 000 111 • Email: support@bloomy.vn</p>
+    <p>
+      Theo dõi chúng tôi: 
+      <a href="#">Facebook</a> • 
+      <a href="#">Instagram</a> • 
+      <a href="#">TikTok</a>
+    </p>
+  </footer>
 </body>
 </html>
