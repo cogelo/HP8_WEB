@@ -1,11 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Form Đăng ký</title>
+  <link rel="stylesheet" href="login.css">
+  <!-- Font Awesome cho icon con mắt -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    
+  <div class="container">
+    <form id="registerForm">
+      <h2>Đăng ký</h2>
+
+      <div class="form-group">
+        <label for="fullname">Họ và tên</label>
+        <input type="text" id="fullname" name="fullname" required>
+        <small id="errorMessages" class="error"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        <small id="emailError" class="error"></small>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" name="password" required>
+        <i class="fa fa-eye toggle-password" toggle="#password"></i>
+        <small id="passwordError" class="error"></small>
+        <small id="passwordStrength"></small>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="confirmPassword">Xác nhận mật khẩu</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <i class="fa fa-eye toggle-password" toggle="#confirmPassword"></i>
+        <small id="confirmPasswordError" class="error"></small>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="agree">
+        <label for="agree">Tôi đồng ý với điều khoản</label>
+        <small id="agreeError" class="error"></small>
+      </div>
+
+      <button type="submit" id="submitBtn">Đăng ký</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
