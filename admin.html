@@ -22,14 +22,7 @@
       background:var(--bg);
       color:var(--text);
     }
-    /* Header */
-    .header{
-      position:sticky;top:0;z-index:50;
-      background:var(--card);
-      box-shadow:var(--shadow);
-      display:flex;align-items:center;gap:16px;
-      padding:12px 20px;
-    }
+    .header{position:sticky;top:0;z-index:50;background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;padding:12px 20px}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
     .logo-badge{width:36px;height:36px;border-radius:12px;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900}
     .search{flex:1;display:flex;align-items:center;gap:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:8px 12px}
@@ -38,7 +31,6 @@
     .icon-btn.secondary{background:#f3f4f6;color:#111827}
     .pill{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;font-size:12px;color:var(--muted)}
 
-    /* Layout */
     .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
     @media (max-width: 900px){
       .layout{grid-template-columns:1fr}
@@ -48,7 +40,6 @@
       .sidebar-backdrop.show{display:block}
     }
 
-    /* Sidebar (Taskbar) */
     .sidebar{background:var(--card);border-right:1px solid #f1f5f9}
     .sidebar header{padding:18px 16px;border-bottom:1px solid #f1f5f9;font-weight:700}
     .nav{display:flex;flex-direction:column;padding:10px}
@@ -57,77 +48,71 @@
     .nav a.active{background:rgba(233,30,99,.1);color:var(--primary)}
     .section-title{padding:14px 12px 6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 
-    /* Content */
     main{padding:24px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    @media (max-width: 1100px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width: 700px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;border:1px solid #f1f5f9}
-    .card img{width:100%;aspect-ratio:4/3;object-fit:cover}
-    .card .body{padding:14px}
-    .price{font-weight:800}
+    .card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;border:1px solid #f1f5f9;padding:14px;margin-top:16px}
     .add{width:100%;margin-top:10px;border:none;background:var(--primary);color:#fff;border-radius:12px;padding:10px 12px;cursor:pointer}
     .add:hover{background:var(--primary-600)}
+    .card img{width:100%;border-radius:14px;margin-bottom:10px}
+
+    table{width:100%;border-collapse:collapse;margin-top:16px}
+    th,td{border:1px solid #e5e7eb;padding:10px;text-align:left}
+    thead tr{background:#fce4ec}
 
     .footer{padding:24px;color:var(--muted);text-align:center;background:#fff}
     .footer a{color:var(--primary);text-decoration:none;margin:0 6px}
   </style>
 </head>
 <body>
-  <!-- Vùng trống, JS sẽ dựng Header + Taskbar tại đây -->
   <div id="app"></div>
 
   <script>
-    // ====== Data mẫu ======
     const navItems = [
-      { id:"home", label:"Trang chủ", icon:"🏠" },
+      { id:"home", label:"Quản lý chi nhánh", icon:"🏢" },
       { id:"collections", label:"Bộ sưu tập", icon:"💐" },
-      { id:"bouquets", label:"Hoa bó", icon:"🌹" },
-      { id:"vases", label:"Bình & Lọ", icon:"🏺" },
+      { id:"flowers", label:"Quản lý hoa", icon:"🌹" },
+      { id:"vases", label:"Quản lý lọ & bình", icon:"🏺" },
       { id:"delivery", label:"Giao nhanh", icon:"🚚" },
       { id:"contact", label:"Liên hệ", icon:"☎️" },
     ];
 
-    // ====== Helpers ======
-    const formatVND = v => v.toLocaleString('vi-VN', { style:'currency', currency:'VND' });
+    let branches = [
+      "Chi nhánh 1: 45 Hoa Hồng, Q.Phú Nhuận",
+      "Chi nhánh 2: 123 Lê Lợi, Q.1",
+      "Chi nhánh 3: 89 Nguyễn Văn Cừ, Q.5",
+      "Chi nhánh 4: 56 Trường Chinh, Q.Tân Bình"
+    ];
 
-    // ====== App Mount ======
+    let collectionsData = [
+      {name:"Hồng Tình Yêu",desc:"Bó hoa hồng đỏ sang trọng",price:"500.000đ",occasion:"Valentine, Kỷ niệm"},
+      {name:"Nắng Mai",desc:"Hoa hướng dương rực rỡ",price:"350.000đ",occasion:"Chúc mừng, Sinh nhật"},
+      {name:"Thanh Xuân",desc:"Hoa baby trắng tinh khôi",price:"280.000đ",occasion:"Tốt nghiệp, Ngày mới"},
+      {name:"Sắc Tím Thủy Chung",desc:"Hoa lavender và cẩm tú cầu",price:"450.000đ",occasion:"Kỷ niệm, Tri ân"},
+    ];
+
     const app = document.getElementById('app');
 
-    // Header
     const header = document.createElement('div');
     header.className = 'header';
     header.innerHTML = `
-      <button class="icon-btn secondary" id="btnToggleSidebar" aria-label="Mở menu">☰</button>
-      <div class="logo" role="banner">
-        <div class="logo-badge">🐥</div>
-        <div>
-          <div>Bloomy</div>
-          <div class="pill">Tiệm hoa & quà tặng</div>
-        </div>
+      <button class="icon-btn secondary" id="btnToggleSidebar">☰</button>
+      <div class="logo"><div class="logo-badge">🐥</div>
+        <div><div>Bloomy</div><div class="pill">Tiệm hoa & quà tặng</div></div>
       </div>
-      <div class="search" role="search">
-        <span>🔎</span>
+      <div class="search"><span>🔎</span>
         <input id="searchInput" placeholder="Tìm bó hoa, loại hoa, dịp tặng..." />
       </div>
-      <button class="icon-btn" id="btnCart" aria-label="Giỏ hàng">🧺</button>
+      <button class="icon-btn" id="btnCart">🧺</button>
     `;
 
-    // Layout
     const layout = document.createElement('div');
     layout.className = 'layout';
 
-    // Sidebar (Taskbar)
     const sidebarWrap = document.createElement('div');
     sidebarWrap.className = 'sidebar';
-    sidebarWrap.setAttribute('aria-label','Thanh điều hướng');
-
     const sidebarHeader = document.createElement('header');
     sidebarHeader.textContent = 'Danh mục';
-
     const nav = document.createElement('nav');
     nav.className = 'nav';
-    nav.setAttribute('role','navigation');
 
     const makeLink = (item, active=false) => {
       const a = document.createElement('a');
@@ -135,7 +120,7 @@
       a.dataset.id = item.id;
       a.innerHTML = `<span>${item.icon}</span><span>${item.label}</span>`;
       if(active) a.classList.add('active');
-      a.addEventListener('click', (e)=>{
+      a.addEventListener('click', e=>{
         e.preventDefault();
         document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));
         a.classList.add('active');
@@ -145,170 +130,157 @@
       });
       return a;
     };
-
     nav.appendChild(Object.assign(document.createElement('div'),{className:'section-title',textContent:'Khám phá'}));
     nav.append(...navItems.map((it,idx)=> makeLink(it, idx===0)));
-
     sidebarWrap.append(sidebarHeader, nav);
 
-    // Backdrop cho mobile
     const backdrop = document.createElement('div');
     backdrop.className = 'sidebar-backdrop';
-    backdrop.addEventListener('click', ()=>{
-      sidebarWrap.classList.remove('open');
-      backdrop.classList.remove('show');
-    });
+    backdrop.addEventListener('click', ()=>{sidebarWrap.classList.remove('open');backdrop.classList.remove('show');});
 
-    // Main
     const main = document.createElement('main');
-
-    // Gắn vào DOM
     layout.append(sidebarWrap, main);
     app.append(header, layout, backdrop);
 
-    // ====== Interaction ======
     document.getElementById('btnToggleSidebar').addEventListener('click',()=>{
-      sidebarWrap.classList.toggle('open');
-      backdrop.classList.toggle('show');
+      sidebarWrap.classList.toggle('open');backdrop.classList.toggle('show');
     });
+    document.getElementById('btnCart').addEventListener('click',()=>alert('Giỏ hàng đang phát triển 🙂'));
 
-    document.getElementById('btnCart').addEventListener('click',()=>{
-      alert('Giỏ hàng đang phát triển 🙂');
-    });
+    function renderBranches(){
+      const list = document.getElementById("branchList");
+      list.innerHTML = "";
+      branches.forEach((b)=>{const li=document.createElement("li");li.textContent=b;list.appendChild(li);});
+    }
 
-    document.getElementById('searchInput').addEventListener('input', e=>{
-      const q = e.target.value.trim().toLowerCase();
-      if(!q){ renderCards(sampleProducts); return; }
-      const filtered = sampleProducts.filter(p=> p.name.toLowerCase().includes(q));
-      renderCards(filtered);
-    });
+    function renderCollections(){
+      const tbody = document.getElementById("collectionsTableBody");
+      tbody.innerHTML="";
+      collectionsData.forEach((c,idx)=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML = `
+          <td>${c.name}</td>
+          <td>${c.desc}</td>
+          <td>${c.price}</td>
+          <td>${c.occasion}</td>
+          <td><button onclick="deleteCollection(${idx})" style="color:red;border:none;background:none;cursor:pointer">Xóa</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    window.deleteCollection = function(i){
+      collectionsData.splice(i,1);
+      renderCollections();
+    }
 
-    // ====== Renderers ======
     function renderContent(section){
       if(section==='home'){
         main.innerHTML = `
-          <h2>🌸 Chào mừng đến Bloomy</h2>
-          <p>Chúng tôi chuyên cung cấp hoa tươi, quà tặng và dịch vụ giao hoa tận nơi nhanh chóng. 
-             Hãy chọn ngay một bó hoa để gửi yêu thương!</p>
-          <div class="grid" id="grid"></div>
-          <div style="margin-top:24px">
-            <h3>Tại sao chọn Bloomy?</h3>
-            <ul>
-              <li>💖 Hoa tươi nhập mới mỗi ngày</li>
-              <li>🚚 Giao nhanh trong 2h nội thành</li>
-              <li>🎁 Miễn phí thiệp & gói quà đẹp</li>
-              <li>💯 Đảm bảo hài lòng</li>
-            </ul>
+          <h2>🏢 Quản lý chi nhánh</h2>
+          <p>Danh sách chi nhánh của Bloomy:</p>
+          <ul id="branchList"></ul>
+          <div class="card">
+            <h3>➕ Thêm chi nhánh mới</h3>
+            <input id="newBranch" placeholder="Nhập tên & địa chỉ chi nhánh..." style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px" />
+            <button class="add" id="btnAddBranch">Thêm</button>
           </div>
         `;
-        renderCards(sampleProducts);
-      } 
+        renderBranches();
+        document.getElementById("btnAddBranch").addEventListener("click",()=>{
+          const val=document.getElementById("newBranch").value.trim();
+          if(val){branches.push(val);document.getElementById("newBranch").value="";renderBranches();}
+          else alert("Vui lòng nhập thông tin chi nhánh!");
+        });
+      }
       else if(section==='collections'){
         main.innerHTML = `
           <h2>💐 Bộ sưu tập</h2>
           <p>Những bộ sưu tập hoa được thiết kế đặc biệt cho từng dịp quan trọng.</p>
-          <div class="grid" id="grid"></div>
-          <div style="margin-top:20px">
-            <h3>🌟 Gợi ý</h3>
-            <p>- Bộ sưu tập "Valentine" lãng mạn</p>
-            <p>- Bộ sưu tập "Sinh nhật" rực rỡ</p>
-            <p>- Bộ sưu tập "Tri ân" thanh lịch</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Tên bộ sưu tập</th><th>Mô tả</th><th>Giá tham khảo</th><th>Dịp phù hợp</th><th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="collectionsTableBody"></tbody>
+          </table>
+          <div class="card">
+            <h3>➕ Thêm bộ sưu tập mới</h3>
+            <input id="colName" placeholder="Tên bộ sưu tập" style="width:100%;margin:4px 0;padding:8px;border:1px solid #ddd;border-radius:8px" />
+            <input id="colDesc" placeholder="Mô tả" style="width:100%;margin:4px 0;padding:8px;border:1px solid #ddd;border-radius:8px" />
+            <input id="colPrice" placeholder="Giá tham khảo" style="width:100%;margin:4px 0;padding:8px;border:1px solid #ddd;border-radius:8px" />
+            <input id="colOcc" placeholder="Dịp phù hợp" style="width:100%;margin:4px 0;padding:8px;border:1px solid #ddd;border-radius:8px" />
+            <button class="add" id="btnAddCollection">Thêm</button>
           </div>
         `;
-        renderCards(sampleProducts);
+        renderCollections();
+        document.getElementById("btnAddCollection").addEventListener("click",()=>{
+          const name=document.getElementById("colName").value.trim();
+          const desc=document.getElementById("colDesc").value.trim();
+          const price=document.getElementById("colPrice").value.trim();
+          const occ=document.getElementById("colOcc").value.trim();
+          if(name&&desc&&price&&occ){
+            collectionsData.push({name,desc,price,occasion:occ});
+            document.getElementById("colName").value="";
+            document.getElementById("colDesc").value="";
+            document.getElementById("colPrice").value="";
+            document.getElementById("colOcc").value="";
+            renderCollections();
+          }else alert("Vui lòng nhập đầy đủ thông tin!");
+        });
       }
-      else if(section==='bouquets'){
+      else if(section==='flowers'){
         main.innerHTML = `
-          <h2>🌹 Hoa bó</h2>
-          <p>Các bó hoa được phối sẵn, phù hợp cho nhiều dịp: sinh nhật, kỷ niệm, tốt nghiệp...</p>
-          <div class="grid" id="grid"></div>
-          <p style="margin-top:20px"><b>Mẹo:</b> Bạn có thể đặt hoa theo màu chủ đạo hoặc loài hoa yêu thích.</p>
+          <h2>🌹 Quản lý hoa</h2>
+          <div class="card">
+            <img src="OIP (2).webp" alt="Hoa hồng" />
+            <h3>Hoa Hồng</h3>
+            <p>Biểu tượng của tình yêu và sự lãng mạn.</p>
+          </div>
         `;
-        renderCards(sampleProducts);
       }
       else if(section==='vases'){
         main.innerHTML = `
-          <h2>🏺 Bình & Lọ</h2>
-          <p>Những mẫu hoa cắm sẵn trong bình và lọ, tiện lợi trang trí tại nhà hoặc văn phòng.</p>
-          <div class="grid" id="grid"></div>
-          <p style="margin-top:20px">✨ Thích hợp làm quà tặng tân gia, khai trương hoặc trang trí bàn làm việc.</p>
+          <h2>🏺 Quản lý lọ & bình</h2>
+          <div class="card">
+            <img src="OIP.webp" alt="Bình hoa" />
+            <h3>Bình gốm cao cấp</h3>
+            <p>Chất liệu gốm sứ bền đẹp, thích hợp cắm hoa trang trí phòng khách.</p>
+          </div>
         `;
-        renderCards(sampleProducts);
       }
       else if(section==='delivery'){
         main.innerHTML = `
           <h2>🚚 Giao nhanh trong 2h</h2>
-          <p>Bloomy hỗ trợ giao hàng siêu tốc nội thành. Đặt hoa trước <b>18:00</b> để nhận ngay trong ngày.</p>
-          <div class="card" style="padding:18px;margin-top:12px">
-            <label style="display:block;margin-bottom:8px">Nhập địa chỉ để kiểm tra:</label>
-            <input id="addr" placeholder="Ví dụ: 123 Lê Lợi, Q.1" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:12px" />
-            <button class="add" style="margin-top:12px" onclick="alert('Khu vực của bạn được hỗ trợ!')">Kiểm tra</button>
-          </div>
-          <p style="margin-top:16px">✔️ Phí ship chỉ từ <b>20.000đ</b>.  
-          ✔️ Miễn phí với đơn hàng trên 500.000đ.</p>
+          <p>Bloomy hỗ trợ giao hàng tận nơi trong 2 giờ tại khu vực TP.HCM.</p>
+          <ul>
+            <li>Đảm bảo hoa tươi mới, gói cẩn thận</li>
+            <li>Thông báo tình trạng đơn hàng qua SMS/Zalo</li>
+            <li>Miễn phí giao hàng cho đơn trên 500.000đ</li>
+          </ul>
         `;
       }
       else if(section==='contact'){
         main.innerHTML = `
           <h2>☎️ Liên hệ</h2>
-          <div class="card"><div class="body">
-            <p><b>Hotline:</b> 0909 000 111</p>
-            <p><b>Zalo:</b> @bloomy.flowers</p>
-            <p><b>Địa chỉ:</b> 45 Hoa Hồng, Q.Phú Nhuận, TP.HCM</p>
-            <p><b>Giờ mở cửa:</b> 8:00 - 21:00 (T2 - CN)</p>
-          </div></div>
-          <div style="margin-top:20px">
-            <h3>📧 Gửi tin nhắn cho chúng tôi</h3>
-            <input placeholder="Tên của bạn" style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px" />
-            <input placeholder="Email / SĐT" style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px" />
-            <textarea placeholder="Nội dung..." style="width:100%;margin:6px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;height:80px"></textarea>
-            <button class="add" style="margin-top:8px">Gửi</button>
-          </div>
+          <p>Bạn cần hỗ trợ? Hãy liên hệ với Bloomy qua:</p>
+          <ul>
+            <li>📞 Hotline: 0909 000 111</li>
+            <li>📧 Email: support@bloomy.vn</li>
+            <li>📍 Địa chỉ: 123 Lê Lợi, Quận 1, TP.HCM</li>
+          </ul>
         `;
       }
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    function renderCards(list){
-      const grid = main.querySelector('#grid');
-      if(!grid){return}
-      grid.innerHTML = '';
-      list.forEach(p=>{
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img loading="lazy" src="${p.img}" alt="${p.name}">
-          <div class="body">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-              <div>
-                <div style="font-weight:700">${p.name}</div>
-                <div class="price">${formatVND(p.price)}</div>
-              </div>
-              <span class="pill">Còn hàng</span>
-            </div>
-            <button class="add">Thêm vào giỏ</button>
-          </div>
-        `;
-        card.querySelector('.add').addEventListener('click', ()=>{
-          alert(`Đã thêm \"${p.name}\" vào giỏ hàng!`);
-        });
-        grid.appendChild(card);
-      });
-    }
-
-    // Khởi tạo
     renderContent('home');
   </script>
 
   <footer class="footer">
     <p>© 2025 Bloomy • Tiệm hoa & quà tặng tại TP.HCM</p>
     <p>Hotline: 0909 000 111 • Email: support@bloomy.vn</p>
-    <p>
-      Theo dõi chúng tôi: 
-      <a href="#">Facebook</a> • 
-      <a href="#">Instagram</a> • 
-      <a href="#">TikTok</a>
-    </p>
+    <p>Theo dõi chúng tôi: <a href="#">Facebook</a> • <a href="#">Instagram</a> • <a href="#">TikTok</a></p>
   </footer>
 </body>
 </html>
