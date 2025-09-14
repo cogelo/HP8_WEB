@@ -3,52 +3,338 @@
 <head>
   <meta charset="UTF-8">
   <title>Form Đăng ký</title>
-  <link rel="stylesheet" href="login.css">
-  <!-- Font Awesome cho icon con mắt -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url(/LopthayHung/Colorful_Floral_Background.jpg);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 600;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .password-group {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #666;
+      font-size: 18px;
+    }
+    
+    .toggle-password:hover {
+      color: #667eea;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin-bottom: 20px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .switch-form {
+      text-align: center;
+      color: #666;
+    }
+    
+    .switch-form button {
+      background: none;
+      color: #667eea;
+      border: none;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 16px;
+      width: auto;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .switch-form button:hover {
+      color: #764ba2;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+      display: block;
+    }
+    
+    #passwordStrength {
+      font-size: 12px;
+      margin-top: 5px;
+      display: block;
+    }
+    
+    .strength-weak { color: #e74c3c; }
+    .strength-medium { color: #f39c12; }
+    .strength-strong { color: #27ae60; }
+  </style>
 </head>
 <body>
   <div class="container">
+    <!-- FORM ĐĂNG KÝ -->
     <form id="registerForm">
       <h2>Đăng ký</h2>
-
+      
       <div class="form-group">
         <label for="fullname">Họ và tên</label>
         <input type="text" id="fullname" name="fullname" required>
         <small id="errorMessages" class="error"></small>
       </div>
-
+      
       <div class="form-group">
         <label for="email">Email</label>
         <input type="email" id="email" name="email" required>
         <small id="emailError" class="error"></small>
       </div>
-
+      
       <div class="form-group password-group">
         <label for="password">Mật khẩu</label>
         <input type="password" id="password" name="password" required>
-        <i class="fa fa-eye toggle-password" toggle="#password"></i>
+        <i class="fa fa-eye toggle-password" data-target="#password"></i>
         <small id="passwordError" class="error"></small>
         <small id="passwordStrength"></small>
       </div>
-
+      
       <div class="form-group password-group">
         <label for="confirmPassword">Xác nhận mật khẩu</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required>
-        <i class="fa fa-eye toggle-password" toggle="#confirmPassword"></i>
+        <i class="fa fa-eye toggle-password" data-target="#confirmPassword"></i>
         <small id="confirmPasswordError" class="error"></small>
       </div>
-
+      
       <div class="form-group checkbox-group">
         <input type="checkbox" id="agree">
         <label for="agree">Tôi đồng ý với điều khoản</label>
         <small id="agreeError" class="error"></small>
       </div>
+      
+      <button type="submit" id="registerBtn">Đăng ký</button>
+      <!-- ĐỔI SANG ĐĂNG NHẬP -->
+      <div class="switch-form">
+        <p>Bạn đã có tài khoản? <button type="button" id="btnShowLogin">Đăng nhập</button></p>
+      </div>
+    </form>
 
-      <button type="submit" id="submitBtn">Đăng ký</button>
+    <!-- Form Đăng nhập (ẩn mặc định) -->
+    <form id="loginForm" style="display:none;">
+      <h2>Đăng nhập</h2>
+      
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="loginEmail" required>
+      </div>
+      
+      <div class="form-group password-group">
+        <label for="loginPassword">Mật khẩu</label>
+        <input type="password" id="loginPassword" name="loginPassword" required>
+        <i class="fa fa-eye toggle-password" data-target="#loginPassword"></i>
+      </div>
+      
+      <button type="submit" id="loginBtn">Đăng nhập</button>
+      
+      <div class="switch-form">
+        <p>Bạn chưa có tài khoản? <button type="button" id="btnShowRegister">Đăng ký</button></p>
+      </div>
     </form>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Lấy các element
+    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
+    const showLoginBtn = document.getElementById("btnShowLogin");
+    const showRegisterBtn = document.getElementById("btnShowRegister");
+
+    // Chuyển sang form đăng nhập
+    showLoginBtn.addEventListener("click", () => {
+      registerForm.style.display = "none";
+      loginForm.style.display = "block";
+    });
+
+    // Chuyển sang form đăng ký
+    showRegisterBtn.addEventListener("click", () => {
+      loginForm.style.display = "none";
+      registerForm.style.display = "block";
+    });
+
+    // Xử lý submit form đăng nhập
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Đăng nhập thành công!");
+      // window.location.href = "/LopthayHung/admin.html";
+    });
+
+    // Xử lý submit form đăng ký
+    registerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      const fullname = document.getElementById("fullname").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const agree = document.getElementById("agree").checked;
+      
+      // Reset error messages
+      document.querySelectorAll('.error').forEach(error => error.textContent = '');
+      
+      let hasError = false;
+      
+      // Validation
+      if (fullname.length < 2) {
+        document.getElementById("errorMessages").textContent = "Họ tên phải có ít nhất 2 ký tự";
+        hasError = true;
+      }
+      
+      if (!email.includes('@')) {
+        document.getElementById("emailError").textContent = "Email không hợp lệ";
+        hasError = true;
+      }
+      
+      if (password.length < 6) {
+        document.getElementById("passwordError").textContent = "Mật khẩu phải có ít nhất 6 ký tự";
+        hasError = true;
+      }
+      
+      if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").textContent = "Mật khẩu không khớp";
+        hasError = true;
+      }
+      
+      if (!agree) {
+        document.getElementById("agreeError").textContent = "Bạn phải đồng ý với điều khoản";
+        hasError = true;
+      }
+      
+      if (!hasError) {
+        alert("Đăng ký thành công!");
+        // window.location.href = "/LopthayHung/admin.html";
+      }
+    });
+
+    // Chức năng hiển thị/ẩn mật khẩu
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const target = document.querySelector(this.getAttribute('data-target'));
+        const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
+        target.setAttribute('type', type);
+        
+        // Thay đổi icon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+    });
+
+    // Kiểm tra độ mạnh mật khẩu
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const strengthIndicator = document.getElementById('passwordStrength');
+      
+      if (password.length === 0) {
+        strengthIndicator.textContent = '';
+        return;
+      }
+      
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      strengthIndicator.className = 'strength-weak';
+      if (strength <= 2) {
+        strengthIndicator.textContent = 'Mật khẩu yếu';
+        strengthIndicator.className = 'strength-weak';
+      } else if (strength <= 4) {
+        strengthIndicator.textContent = 'Mật khẩu trung bình';
+        strengthIndicator.className = 'strength-medium';
+      } else {
+        strengthIndicator.textContent = 'Mật khẩu mạnh';
+        strengthIndicator.className = 'strength-strong';
+      }
+    });
+  </script>
 </body>
 </html>
