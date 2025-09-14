@@ -22,7 +22,8 @@
       color:var(--text);
     }
     /* Header */
-    .header{position:sticky;top:0;z-index:50;background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;padding:12px 20px}
+    .header{position:sticky;top:0;z-index:50;background:var(--card);box-shadow:var(--shadow);
+      display:flex;align-items:center;gap:16px;padding:12px 20px}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
     .logo-badge{width:36px;height:36px;border-radius:12px;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900}
     .search{flex:1;display:flex;align-items:center;gap:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:8px 12px}
@@ -30,18 +31,12 @@
     .icon-btn{border:none;background:#111827;color:#fff;border-radius:12px;padding:10px 12px;cursor:pointer}
     .icon-btn.secondary{background:#f3f4f6;color:#111827}
 
-    /* Layout */
-    .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
-    @media (max-width: 900px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 30% 0 0;max-width:300px;transform:translateX(-102%);transition:transform .25s ease;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}.sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.25);backdrop-filter:blur(1px);display:none}.sidebar-backdrop.show{display:block}}
-
-    /* Sidebar */
-    .sidebar{background:var(--card);border-right:1px solid #f1f5f9}
-    .sidebar header{padding:18px 16px;border-bottom:1px solid #f1f5f9;font-weight:700}
-    .nav{display:flex;flex-direction:column;padding:10px}
-    .nav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);padding:10px 12px;border-radius:12px;font-weight:600}
-    .nav a:hover{background:#f8fafc}
-    .nav a.active{background:rgba(50,233,30,.15);color:var(--primary)}
-    .section-title{padding:14px 12px 6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    /* Taskbar trong header */
+    .taskbar{display:flex;gap:10px;align-items:center;margin-left:20px}
+    .taskbar a{display:flex;align-items:center;text-decoration:none;color:var(--text);
+      padding:8px 12px;border-radius:10px;font-weight:600;font-size:14px}
+    .taskbar a:hover{background:#f8fafc}
+    .taskbar a.active{background:rgba(50,233,30,.15);color:var(--primary)}
 
     /* Content */
     main{padding:24px}
@@ -94,63 +89,33 @@
     const header = document.createElement('div');
     header.className = 'header';
     header.innerHTML = `
-      <button class="icon-btn secondary" id="btnToggleSidebar">☰</button>
       <div class="logo"><div class="logo-badge">🌸</div><div>Bloomy</div></div>
+      <div class="taskbar">
+        ${navItems.map((it,idx)=>`<a href="#${it.id}" class="nav-link ${idx===0?'active':''}">${it.icon} ${it.label}</a>`).join('')}
+      </div>
       <div class="search"><span>🔎</span><input id="searchInput" placeholder="Tìm hoa..." /></div>
       <button class="icon-btn" id="btnCart">🧺</button>
     `;
 
-    const layout = document.createElement('div');
-    layout.className = 'layout';
-
-    const sidebarWrap = document.createElement('div');
-    sidebarWrap.className = 'sidebar';
-    const sidebarHeader = document.createElement('header');
-    sidebarHeader.textContent = 'Danh mục';
-    const nav = document.createElement('nav');
-    nav.className = 'nav';
-
-    const makeLink = (item, active=false) => {
-      const a = document.createElement('a');
-      a.href = `#${item.id}`;
-      a.innerHTML = `<span>${item.icon}</span><span>${item.label}</span>`;
-      if(active) a.classList.add('active');
-      a.addEventListener('click', e=>{
-        e.preventDefault();
-        document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active'));
-        a.classList.add('active');
-        renderContent(item.id);
-        sidebarWrap.classList.remove('open');
-        backdrop.classList.remove('show');
-      });
-      return a;
-    };
-
-    nav.append(...navItems.map((it,idx)=> makeLink(it, idx===0)));
-    sidebarWrap.append(sidebarHeader, nav);
-
-    const backdrop = document.createElement('div');
-    backdrop.className = 'sidebar-backdrop';
-    backdrop.addEventListener('click', ()=>{
-      sidebarWrap.classList.remove('open');
-      backdrop.classList.remove('show');
-    });
-
     const main = document.createElement('main');
+    app.append(header, main);
 
-    layout.append(sidebarWrap, main);
-    app.append(header, layout, backdrop);
-
-    document.getElementById('btnToggleSidebar').addEventListener('click',()=>{
-      sidebarWrap.classList.toggle('open');
-      backdrop.classList.toggle('show');
-    });
     document.getElementById('btnCart').addEventListener('click',()=>alert('Giỏ hàng đang phát triển 🙂'));
     document.getElementById('searchInput').addEventListener('input', e=>{
       const q = e.target.value.trim().toLowerCase();
       if(!q){ renderCards(sampleProducts); return; }
       const filtered = sampleProducts.filter(p=> p.name.toLowerCase().includes(q));
       renderCards(filtered);
+    });
+
+    // Xử lý click menu
+    document.querySelectorAll('.taskbar a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        document.querySelectorAll('.taskbar a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        renderContent(a.getAttribute('href').substring(1));
+      });
     });
 
     function renderContent(section){
@@ -160,7 +125,7 @@
             <div class="hero-text">
               <h1>Chào mừng đến Bloomy</h1>
               <p>Hoa tươi mỗi ngày, giao tận nơi nhanh chóng. Lựa chọn bó hoa hoàn hảo cho mọi dịp.</p>
-              <button onclick="location.hash='#collections'">Khám phá ngay</button>
+              <button onclick="renderContent('collections')">Khám phá ngay</button>
             </div>
             <img src="https://picsum.photos/600/400?random=7" alt="Hero Image">
           </div>
@@ -174,7 +139,12 @@
       } else if(section==='delivery'){
         main.innerHTML = `<h2>Giao nhanh 🚚</h2><p>Giao nội thành trong 2 giờ cho đơn trước 18:00. Phí ship từ <b>20.000đ</b>.</p>`;
       } else if(section==='contact'){
-        main.innerHTML = `<h2>Liên hệ ☎️</h2><div class="card"><div class="body"><p><b>Hotline:</b> 0909 000 111</p><p><b>Zalo:</b> @bloomy.flowers</p><p><b>Địa chỉ:</b> 45 Hoa Hồng, Q.Phú Nhuận, TP.HCM</p></div></div>`;
+        main.innerHTML = `<h2>Liên hệ ☎️</h2>
+          <div class="card"><div class="body">
+            <p><b>Hotline:</b> 0909 000 111</p>
+            <p><b>Zalo:</b> @bloomy.flowers</p>
+            <p><b>Địa chỉ:</b> 45 Hoa Hồng, Q.Phú Nhuận, TP.HCM</p>
+          </div></div>`;
       }
       window.scrollTo({top:0,behavior:'smooth'});
     }
@@ -186,7 +156,19 @@
       list.forEach(p=>{
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<img src="${p.img}" alt="${p.name}"><div class="body"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div><div style="font-weight:700">${p.name}</div><div class="price">${formatVND(p.price)}</div></div><span class="pill">Còn hàng</span></div><button class="add">Thêm vào giỏ</button></div>`;
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div class="body">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+              <div>
+                <div style="font-weight:700">${p.name}</div>
+                <div class="price">${formatVND(p.price)}</div>
+              </div>
+              <span class="pill">Còn hàng</span>
+            </div>
+            <button class="add">Thêm vào giỏ</button>
+          </div>
+        `;
         card.querySelector('.add').addEventListener('click',()=>alert(`Đã thêm \"${p.name}\" vào giỏ hàng!`));
         grid.appendChild(card);
       });
